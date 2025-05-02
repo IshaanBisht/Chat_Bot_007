@@ -7,166 +7,188 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-color: #3b82f6;
-      --primary-hover: #2563eb;
-      --background: #f8fafc;
-      --card-bg: #ffffff;
-      --text-dark: #1e293b;
-      --text-light: #64748b;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --radius: 12px;
-      --transition: all 0.3s ease;
-    }
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --background: #f9fafb;
+  --card-bg: #ffffff;
+  --text-dark: #111827;
+  --text-light: #6b7280;
+  --shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  --radius: 16px;
+  --transition: all 0.3s ease;
+}
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
 
-    body {
-      background-color: var(--background);
-      color: var(--text-dark);
-      min-height: 100vh;
-      padding: 2rem;
-    }
+body {
+  background-color: var(--background);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
+.container {
+  width: 100%;
+  max-width: 1000px;
+}
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
 
-    .welcome-message {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--primary-color);
-    }
+.welcome-message {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
 
-    .logout-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background-color: var(--primary-color);
-      color: white;
-      text-decoration: none;
-      border-radius: var(--radius);
-      transition: var(--transition);
-    }
+.logout-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
 
-    .logout-btn:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-2px);
-    }
+.logout-btn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
 
-    .page-title {
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
-      color: var(--text-dark);
-      text-align: center;
-    }
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
 
-    .users-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
+.users-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
 
-    .user-card {
-      background-color: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-      color: inherit;
-    }
+.user-card {
+  background: var(--card-bg);
+  padding: 1.2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  gap: 1rem;
+  transition: var(--transition);
+  animation: fadeIn 0.4s ease-in;
+}
 
-    .user-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
+.user-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
 
-    .user-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: var(--primary-color);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
+.chatbot-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 3rem;
+  padding: 1rem 1.5rem;
+  background-color: var(--card-bg);
+  color: var(--primary-color);
+  font-weight: 600;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--radius);
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
 
-    .user-info {
-      flex: 1;
-    }
+.chatbot-card:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-4px);
+}
 
-    .user-name {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
-    .user-status {
-      font-size: 0.8rem;
-      color: var(--text-light);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
+.user-info {
+  flex: 1;
+}
 
-    .status-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #10b981; /* Green for online */
-    }
+.user-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
 
-    .status-indicator.offline {
-      background-color: #64748b; /* Gray for offline */
-    }
+.user-status {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
 
-    .chat-icon {
-      color: var(--primary-color);
-      font-size: 1.2rem;
-    }
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: #10b981;
+}
 
-    
+.status-indicator.offline {
+  background: #9ca3af;
+}
 
-    /* Responsive design */
-    @media (max-width: 768px) {
-      body {
-        padding: 1rem;
-      }
+.chat-icon {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
 
-      .users-list {
-        grid-template-columns: 1fr;
-      }
+a[href*="chat-ai"] {
+  display: inline-block;
+  margin-top: 2rem;
+  text-decoration: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  transition: var(--transition);
+}
 
-      .page-title {
-        font-size: 1.5rem;
-      }
-    }
+a[href*="chat-ai"]:hover {
+  text-decoration: underline;
+}
 
-    /* Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
     .user-card {
       animation: fadeIn 0.3s ease-out forwards;
@@ -222,7 +244,9 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/script.js"></script>
   <div>
-    <a href="https://chat-ai-7922.onrender.com/">Link to chat bot </a>
+    <a href="https://chat-ai-7922.onrender.com/" class="chatbot-card">
+      <i class="fas fa-robot"></i> Talk to our AI Chat Bot
+    </a>
     
   </div> 
 
