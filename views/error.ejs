@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .error-container {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 50px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+        .error-actions {
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Error</h1>
+        <p><%= message %></p>
+        
+        <% if (error && error.stack) { %>
+            <pre style="text-align: left; background: #f1f1f1; padding: 10px; border-radius: 5px;">
+                <%= error.stack %>
+            </pre>
+        <% } %>
+
+        <div class="error-actions">
+            <a href="/" class="btn">Go Home</a>
+            <a href="/login" class="btn">Login</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat with <%= chatUser.firstName %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --your-msg-color: #dcf8c6;
+      --their-msg-color: #ffffff;
+      --typing-indicator: #e5e5ea;
+      --input-bg: #f9fafb;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      --online-color: #4CAF50;
+      --offline-color: #f44336;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: var(--text-dark);
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      z-index: 10;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 1rem;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #e1e1e1;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .status-indicator.online {
+      background-color: var(--online-color);
+    }
+
+    .status-indicator.offline {
+      background-color: var(--offline-color);
+    }
+
+    header h2 {
+      color: black;
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    header nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    header nav a:hover {
+      opacity: 0.9;
+    }
+
+    header nav a i {
+      font-size: 0.9rem;
+    }
+ 
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      position: relative;
+      height: calc(100vh - 60px);
+    }
+
+    #chat-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      background-image: 
+        linear-gradient(#e5e5ea 1px, transparent 1px),
+        linear-gradient(90deg, #e5e5ea 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .msg {
+      margin: 0.5rem 0;
+      padding: 0.8rem 1.2rem;
+      border-radius: 18px;
+      max-width: 80%;
+      word-wrap: break-word;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      box-shadow: var(--shadow);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .you {
+      background-color: var(--your-msg-color);
+      align-self: flex-end;
+      text-align: right;
+      border-bottom-right-radius: 4px;
+      color: var(--text-dark);
+      margin-left: 20%;
+    }
+
+    .them {
+      background-color: var(--their-msg-color);
+      align-self: flex-start;
+      text-align: left;
+      border-bottom-left-radius: 4px;
+      color: var(--text-dark);
+      margin-right: 20%;
+    }
+
+    .msg strong {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.85rem;
+      color: var(--primary-color);
+    }
+
+    .msg .timestamp {
+      font-size: 0.7rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+      display: inline-block;
+    }
+
+    #message-form {
+      display: flex;
+      padding: 1rem;
+      gap: 0.8rem;
+      border-top: 1px solid #e1e1e1;
+      background-color: var(--input-bg);
+      align-items: center;
+    }
+
+    #message-input {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border-radius: 24px;
+      border: 1px solid #ddd;
+      outline: none;
+      font-size: 0.95rem;
+      background: white;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    #message-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    button[type="submit"] {
+      padding: 0.8rem 1.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button[type="submit"]:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button[type="submit"] i {
+      font-size: 0.9rem;
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      padding: 1rem;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      background-color: var(--typing-indicator);
+      border-radius: 50%;
+      display: inline-block;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .typing-dots span:nth-child(1) { animation-delay: 0s; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      background-color: #f8f9fa;
+    }
+
+    .status-badge.online {
+      color: var(--online-color);
+    }
+
+    .status-badge.offline {
+      color: var(--offline-color);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .chat-container {
+        height: 100vh;
+        border-radius: 0;
+      }
+      
+      header {
+        padding: 0.8rem;
+      }
+      
+      .msg {
+        max-width: 85%;
+        padding: 0.7rem 1rem;
+      }
+      
+      #message-input {
+        padding: 0.7rem 1rem;
+      }
+      
+      button[type="submit"] {
+        padding: 0.7rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="chat-header">
+      <h2><%= chatUser.firstName %> <%= chatUser.lastName %></h2>
+      <div id="status-badge" class="status-badge <%= chatUser.online ? 'online' : 'offline' %>">
+        <span class="status-indicator <%= chatUser.online ? 'online' : 'offline' %>"></span>
+        <span id="status-text"><%= chatUser.online ? 'Online' : 'Offline' %></span>
+        <% if (!chatUser.online) { %>
+          <span id="last-seen">• Last seen <%= new Date(chatUser.lastSeen).toLocaleString() %></span>
+        <% } %>
+      </div>
+    </div>
+    <nav>
+      <a href="/users"><i class="fas fa-users"></i> Users</a>
+      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </header>
+  
+  <div class="chat-container">
+    <div id="chat-box">
+      <% messages.forEach(msg => { %>
+        <div class="msg <%= msg.sender.toString() === currentUser._id.toString() ? 'you' : 'them' %>" 
+             data-time="<%= new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>">
+          <strong><%= msg.sender.toString() === currentUser._id.toString() ? 'You' : chatUser.firstName %>:</strong>
+          <%= msg.content %>
+          <span class="timestamp"><%= new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></span>
+        </div>
+      <% }) %>
+      
+      <!-- Typing indicator will be inserted here by JavaScript -->
+      <div id="typing-indicator" class="typing-indicator" style="display: none;">
+        <div class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <span><%= chatUser.firstName %> is typing...</span>
+      </div>
+    </div>
+
+    <form id="message-form">
+      <input type="text" id="message-input" placeholder="Type a message..." required autocomplete="off" />
+      <button type="submit"><i class="fas fa-paper-plane"></i> Send</button>
+    </form>
+  </div>
+
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Session variables -->
+  <script id="session-data" type="application/json">
+    {
+      "currentUserId": "<%= currentUser._id %>",
+      "chatUserId": "<%= chatUser._id %>",
+      "chatUserName": "<%= chatUser.firstName %>"
+    }
+  </script>
+  <script src="/js/session-vars.js"></script>
+
+  <!-- Chat logic -->
+  <script src="/js/script.js"></script>
+
+  <script>
+    // Handle real-time status updates
+    const socket = io();
+    const statusBadge = document.getElementById('status-badge');
+    const statusText = document.getElementById('status-text');
+    const statusIndicator = document.querySelector('.status-indicator');
+    const lastSeenElement = document.getElementById('last-seen');
+
+    socket.on('user-status-changed', ({ userId, online, lastSeen }) => {
+      if (userId === '<%= chatUser._id %>') {
+        // Update status UI
+        statusBadge.className = `status-badge ${online ? 'online' : 'offline'}`;
+        statusIndicator.className = `status-indicator ${online ? 'online' : 'offline'}`;
+        statusText.textContent = online ? 'Online' : 'Offline';
+        
+        // Update or create last seen element
+        if (!online) {
+          const lastSeenTime = new Date(lastSeen).toLocaleString();
+          if (lastSeenElement) {
+            lastSeenElement.textContent = `• Last seen ${lastSeenTime}`;
+          } else {
+            const newLastSeen = document.createElement('span');
+            newLastSeen.id = 'last-seen';
+            newLastSeen.textContent = `• Last seen ${lastSeenTime}`;
+            statusBadge.appendChild(newLastSeen);
+          }
+        } else if (lastSeenElement) {
+          lastSeenElement.remove();
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>
